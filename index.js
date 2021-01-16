@@ -5,7 +5,6 @@ const cluster = require('cluster');
 const sassMiddleware = require('node-sass-middleware');
 const { TalkClient, TestUtil, AuthStatusCode, StatusCode } = require('node-kakao');
 const { cpus } = require('os');
-const { main, api } = require('./routes');
 
 const port = process.env.PORT || 3000;
 
@@ -36,8 +35,10 @@ if (cluster.isMaster) {
   app.use(express.static(resolve(__dirname, './public')));
   app.use(json());
   app.use(urlencoded({ extended: true }));
-  app.use('/', main);
-  //app.use('/api', api);
+
+  app.get('/', (req, res) => {
+    res.render('index');
+  });
 
   app.get('/api/login', (req, res) => {
     const client = new TalkClient('WebTalk', 'loco');
@@ -63,8 +64,7 @@ if (cluster.isMaster) {
           return password;
         })(),
       };
-      console.log(clients[client.ClientUser.MainUserInfo.Id.toString()].password.substr(0, 2)); // 잘됨 22
-      res.send(`${client.ClientUser.MainUserInfo.Nickname}로 로그인했습니다.`); // 잘됨
+      res.send(`${client.ClientUser.MainUserInfo.Nickname}로 로그인했습니다.`);
     });
   });
 
