@@ -102,3 +102,10 @@ dist
 
 # TernJS port file
 .tern-port
+
+# macOS Desktop Services Store
+.DS_Store
+
+# Windows thumbs.db
+thumbs.db
+photothumb.db
